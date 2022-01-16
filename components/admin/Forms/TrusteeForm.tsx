@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
-import { TextInput } from "../TextInput";
 import { LoadingSpinner } from "../LoadingSpinner";
+import { TextInput } from "../TextInput";
+import { Editor } from "../Editor";
 
 interface TrusteeFormProps {
   className?: string;
@@ -32,6 +33,13 @@ export const TrusteeForm: React.FC<TrusteeFormProps> = ({
           name="name"
           placeholder="John Doe"
         />
+      </div>
+
+      <div className="flex flex-col mb-8 w-full">
+        <label className="uppercase block text-gray-700 text-sm font-bold mb-2">
+          Description
+        </label>
+        <Editor />
       </div>
 
       <div className="flex items-center border-t-2 border-slate-300 pt-4 h-24">
