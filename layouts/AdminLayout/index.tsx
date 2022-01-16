@@ -1,6 +1,8 @@
 import { useAuth, AuthContextProvider } from "@/contexts/AuthContext";
 import { AuthenticatedView } from "./AuthenticatedView";
 import { UnauthenticatedView } from "./UnauthenticatedView";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AdminView: React.FC = ({ children }) => {
   const { user, login, logout } = useAuth();
@@ -22,6 +24,7 @@ const AdminView: React.FC = ({ children }) => {
       ) : (
         <UnauthenticatedView onLogin={onLogin} />
       )}
+      <ToastContainer />
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import type { ReactElement } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { AdminLayout } from "@/components/admin/Layout";
+import { AdminLayout } from "layouts/AdminLayout";
 import { ProductForm } from "@/components/admin/Forms/ProductForm";
 import { Panel } from "@/components/admin/Panel";
 import { useNetlifyPostFunction } from "@/hooks/useNetlifyPostFunction";

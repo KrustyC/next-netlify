@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import type { ReactElement } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNetlifyGetFunction } from "@/hooks/useNetlifyGetFunction";
-import { AdminLayout } from "@/components/admin/Layout";
+import { AdminLayout } from "layouts/AdminLayout";
 import { SummaryCard } from "@/components/admin/Cards/SummaryCard";
 import { LoadingSpinner } from "@/components/admin/LoadingSpinner";
 

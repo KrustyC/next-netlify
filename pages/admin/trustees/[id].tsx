@@ -1,8 +1,9 @@
 import type { NextPage } from "next";
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 import { useAuth } from "@/contexts/AuthContext";
-import { AdminLayout } from "@/components/admin/Layout";
+import { AdminLayout } from "layouts/AdminLayout";
 import { LoadingSpinner } from "@/components/admin/LoadingSpinner";
 import { TrusteeForm } from "@/components/admin/Forms/TrusteeForm";
 import { useNetlifyGetFunction } from "@/hooks/useNetlifyGetFunction";
@@ -30,13 +31,24 @@ const Edit: React.FC<EditProps> = ({ id }) => {
   } = useNetlifyPutFunction<{ trustee: Trustee }>({ user });
 
   const onEditTrustee = async (updatedTrustee: Trustee) => {
-    console.log("UPDAATED TRUSTEE", updatedTrustee);
     await onUpdate(`/admin-trustees?id=${id}`, { trustee: updatedTrustee });
+
+    toast.success("Trustee successfully updated");
 
     setTimeout(() => {
       router.push("/admin/trustees");
     }, 800);
   };
+
+  useEffect(() => {
+    if (error) {
+      toast.error("Error fetching trustee");
+    }
+
+    if (updateError) {
+      toast.error("Error updating trustee");
+    }
+  }, [error, updateError]);
 
   return (
     <div className="p-4">

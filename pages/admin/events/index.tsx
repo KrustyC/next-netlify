@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import type { ReactElement } from "react";
 import { IndexLayout } from "@/components/admin/IndexLayout";
-import { AdminLayout } from "@/components/admin/Layout";
+import { AdminLayout } from "layouts/AdminLayout";
 import { LoadingSpinner } from "@/components/admin/LoadingSpinner";
 import { EventCard } from "@/components/admin/Cards/EventCard";
 import { useNetlifyGetFunction } from "@/hooks/useNetlifyGetFunction";

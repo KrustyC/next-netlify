@@ -1,8 +1,9 @@
 import type { NextPage } from "next";
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 import { useAuth } from "@/contexts/AuthContext";
-import { AdminLayout } from "@/components/admin/Layout";
+import { AdminLayout } from "layouts/AdminLayout";
 import { LoadingSpinner } from "@/components/admin/LoadingSpinner";
 import { SchoolForm } from "@/components/admin/Forms/SchoolForm";
 import { useNetlifyGetFunction } from "@/hooks/useNetlifyGetFunction";
@@ -32,10 +33,22 @@ const Edit: React.FC<EditProps> = ({ id }) => {
   const onEditSchool = async (updatedSchool: School) => {
     await onUpdate(`/admin-schools?id=${id}`, { school: updatedSchool });
 
+    toast.success("School successfully updated");
+
     setTimeout(() => {
       router.push("/admin/schools");
     }, 800);
   };
+
+  useEffect(() => {
+    if (error) {
+      toast.error("Error fetching school");
+    }
+
+    if (updateError) {
+      toast.error("Error updating school");
+    }
+  }, [error, updateError]);
 
   return (
     <div className="p-4">

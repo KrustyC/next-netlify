@@ -1,8 +1,9 @@
 import type { NextPage } from "next";
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
+import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { useAuth } from "@/contexts/AuthContext";
-import { AdminLayout } from "@/components/admin/Layout";
+import { AdminLayout } from "layouts/AdminLayout";
 import { LoadingSpinner } from "@/components/admin/LoadingSpinner";
 import { TrusteeForm } from "@/components/admin/Forms/TrusteeForm";
 import { useNetlifyGetFunction } from "@/hooks/useNetlifyGetFunction";
@@ -37,6 +38,16 @@ const Edit: React.FC<EditProps> = ({ id }) => {
       router.push("/admin/trustees");
     }, 800);
   };
+
+  useEffect(() => {
+    if (error) {
+      toast.error("Error fetching product");
+    }
+
+    if (updateError) {
+      toast.error("Error updating product");
+    }
+  }, [error, updateError]);
 
   return (
     <div className="p-4">

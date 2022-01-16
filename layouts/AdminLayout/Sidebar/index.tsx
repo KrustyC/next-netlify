@@ -1,14 +1,14 @@
-import { PieChartIcon } from "../../../icons/PieChart";
-import { ProjectsIcon } from "../../../icons/Projects";
-import { NewsIcon } from "../../../icons/News";
-import { CalendarIcon } from "../../../icons/Calendar";
-import { CartIcon } from "../../../icons/Cart";
-import { ArchiveIcon } from "../../../icons/Archive";
-import { LoveIcon } from "../../../icons/Love";
-import { PeopleIcon } from "../../../icons/People";
-import { SchoolIcon } from "../../../icons/School";
-import { ImageIcon } from "../../../icons/Image";
-import { DocumentIcon } from "../../../icons/Document";
+import { PieChartIcon } from "../../../components/icons/PieChart";
+import { ProjectsIcon } from "../../../components/icons/Projects";
+import { NewsIcon } from "../../../components/icons/News";
+import { CalendarIcon } from "../../../components/icons/Calendar";
+import { CartIcon } from "../../../components/icons/Cart";
+import { ArchiveIcon } from "../../../components/icons/Archive";
+import { LoveIcon } from "../../../components/icons/Love";
+import { PeopleIcon } from "../../../components/icons/People";
+import { SchoolIcon } from "../../../components/icons/School";
+import { ImageIcon } from "../../../components/icons/Image";
+import { DocumentIcon } from "../../../components/icons/Document";
 import { SidebarLink } from "./SidebarLink";
 
 export const Sidebar: React.FC = () => (

@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
-import { ReactElement } from "react";
-import { AdminLayout } from "@/components/admin/Layout";
+import { ReactElement, useEffect } from "react";
+import { toast } from "react-toastify";
+import { AdminLayout } from "layouts/AdminLayout";
 import { DeleteItemModal } from "@/components/admin/DeleteItemModal";
 import { LoadingSpinner } from "@/components/admin/LoadingSpinner";
 import { IndexLayout } from "@/components/admin/IndexLayout";
@@ -21,6 +22,12 @@ const AdminTrustees: NextPage = () => {
     fetchPath: "/admin-trustees",
     parseResponse: (response) => response.trustees,
   });
+
+  useEffect(() => {
+    if (error) {
+      toast.error("Error fetching trustees");
+    }
+  }, [error]);
 
   return (
     <div className="h-screen bg-admin-grey">

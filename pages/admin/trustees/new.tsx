@@ -1,11 +1,13 @@
 import type { NextPage } from "next";
 import type { ReactElement } from "react";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 import { useAuth } from "@/contexts/AuthContext";
-import { AdminLayout } from "@/components/admin/Layout";
+import { AdminLayout } from "layouts/AdminLayout";
 import { TrusteeForm } from "@/components/admin/Forms/TrusteeForm";
 import { Panel } from "@/components/admin/Panel";
 import { useNetlifyPostFunction } from "@/hooks/useNetlifyPostFunction";
-import { Trustee } from '@/types/global';
+import { Trustee } from "@/types/global";
 import { useRouter } from "next/router";
 
 const AdminTrusteesCreate: NextPage = () => {
@@ -21,10 +23,18 @@ const AdminTrusteesCreate: NextPage = () => {
   const onCreateTrustee = async (trustee: Trustee) => {
     await onCreate(`/admin-trustees`, { trustee });
 
+    toast.success("Trustee successfully added to the database!");
+
     setTimeout(() => {
       router.push("/admin/trustees");
     }, 800);
   };
+
+  useEffect(() => {
+    if (updateError) {
+      toast.error(updateError.message);
+    }
+  }, [updateError]);
 
   return (
     <div className="p-4">
@@ -41,7 +51,9 @@ const AdminTrusteesCreate: NextPage = () => {
   );
 };
 
-(AdminTrusteesCreate as any).getLayout = function getLayout(page: ReactElement) {
+(AdminTrusteesCreate as any).getLayout = function getLayout(
+  page: ReactElement
+) {
   return <AdminLayout>{page}</AdminLayout>;
 };
 

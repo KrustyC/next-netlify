@@ -1,11 +1,12 @@
 import type { NextPage } from "next";
-import { ReactElement } from "react";
-import { AdminLayout } from "@/components/admin/Layout";
+import { ReactElement, useEffect } from "react";
+import { AdminLayout } from "layouts/AdminLayout";
 import { DeleteItemModal } from "@/components/admin/DeleteItemModal";
 import { IndexLayout } from "@/components/admin/IndexLayout";
 import { SchoolCard } from "@/components/admin/Cards/SchoolCard";
 import { LoadingSpinner } from "@/components/admin/LoadingSpinner";
 import { useAdminIndexList } from "@/hooks/useAdminIndexList";
+import { toast } from "react-toastify";
 import { School } from "@/types/global";
 
 const AdminSchools: NextPage = () => {
@@ -21,6 +22,12 @@ const AdminSchools: NextPage = () => {
     fetchPath: "/admin-schools",
     parseResponse: (response) => response.schools,
   });
+
+  useEffect(() => {
+    if (error) {
+      toast.error("Error fetching schools");
+    }
+  }, [error]);
 
   return (
     <div className="h-screen bg-admin-grey">

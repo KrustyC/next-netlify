@@ -1,7 +1,8 @@
 import type { NextPage } from "next";
-import type { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
+import { toast } from "react-toastify";
 import { useAuth } from "@/contexts/AuthContext";
-import { AdminLayout } from "@/components/admin/Layout";
+import { AdminLayout } from "layouts/AdminLayout";
 import { SchoolForm } from "@/components/admin/Forms/SchoolForm";
 import { Panel } from "@/components/admin/Panel";
 import { useNetlifyPostFunction } from "@/hooks/useNetlifyPostFunction";
@@ -21,10 +22,16 @@ const AdminSchoolsCreate: NextPage = () => {
   const onCreateSchool = async (school: School) => {
     await onCreate(`/admin-schools`, { school });
 
+    toast.success("School successfully created!");
+
     setTimeout(() => {
       router.push("/admin/schools");
     }, 800);
   };
+
+  useEffect(() => {
+    toast.error(updateError);
+  }, [updateError]);
 
   return (
     <div className="p-4">
