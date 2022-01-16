@@ -59,3 +59,8 @@
     @apply bg-admin-danger border text-white hover:bg-admin-danger-dark disabled:bg-admin-danger-light disabled:hover:bg-admin-danger-light disabled:text-gray-500 disabled:border-gray-200 disabled:shadow-none;
   }
 }
+
+.ProseMirror {
+  height: 100% !important;
+  outline: none !important;
+}

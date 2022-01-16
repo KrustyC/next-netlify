@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { LoadingSpinner } from "../LoadingSpinner";
 import { TextInput } from "../TextInput";
 import { Editor } from "../Editor";
@@ -19,7 +19,9 @@ export const TrusteeForm: React.FC<TrusteeFormProps> = ({
   pending,
   onSaveTrustee,
 }) => {
-  const { register, handleSubmit } = useForm({ defaultValues: { ...trustee } });
+  const { register, control, handleSubmit } = useForm({
+    defaultValues: { ...trustee },
+  });
 
   return (
     <form
@@ -39,7 +41,15 @@ export const TrusteeForm: React.FC<TrusteeFormProps> = ({
         <label className="uppercase block text-gray-700 text-sm font-bold mb-2">
           Description
         </label>
-        <Editor />
+        <div className="h-24">
+          <Controller
+            control={control}
+            name="description"
+            render={({ field: { onChange, value } }) => (
+              <Editor value={value} onChange={onChange} />
+            )}
+          />
+        </div>
       </div>
 
       <div className="flex items-center border-t-2 border-slate-300 pt-4 h-24">

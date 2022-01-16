@@ -30,6 +30,7 @@ const Edit: React.FC<EditProps> = ({ id }) => {
   } = useNetlifyPutFunction<{ trustee: Trustee }>({ user });
 
   const onEditTrustee = async (updatedTrustee: Trustee) => {
+    console.log("UPDAATED TRUSTEE", updatedTrustee);
     await onUpdate(`/admin-trustees?id=${id}`, { trustee: updatedTrustee });
 
     setTimeout(() => {
