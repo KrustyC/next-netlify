@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import type { ReactElement } from "react";
 import { IndexLayout } from "@/components/admin/IndexLayout";
 import { AdminLayout } from "@/components/admin/Layout";
+import { LoadingSpinner } from "@/components/admin/LoadingSpinner";
 import { EventCard } from "@/components/admin/Cards/EventCard";
 import { useNetlifyGetFunction } from "@/hooks/useNetlifyGetFunction";
 import { useAuth } from "@/contexts/AuthContext";
@@ -28,7 +29,7 @@ const AdminEvents: NextPage = () => {
     <div className="h-screen bg-admin-grey">
       <div className="flex flex-wrap">
         {loading ? (
-          <div>Loading...</div>
+          <LoadingSpinner />
         ) : (
           <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4">
             {events.map((event, index) => (

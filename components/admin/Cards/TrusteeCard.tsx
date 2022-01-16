@@ -1,7 +1,7 @@
-import { MarkerIcon } from "../../icons/Marker";
+import { Trustee } from "@/types/global";
 
 interface TrusteeCardProps {
-  trustee: any;
+  trustee: Trustee;
   onWantToRemoveTrustee: VoidFunction;
 }
 

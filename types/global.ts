@@ -6,12 +6,22 @@ export enum REST_METHOD {
 }
 
 export type School = {
-  _id: string;
+  _id?: string;
   name: string;
   postcode: string;
 };
 
-export type Trustee = {
-  _id: string;
+export type Product = {
+  _id?: string;
   name: string;
+  description: { [x: string]: {} | undefined; };
+  image: string;
+  price: number | null;
+  etsyLink: string;
+};
+
+export type Trustee = {
+  _id?: string;
+  name: string;
+  postcode: string;
 };

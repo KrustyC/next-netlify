@@ -1,7 +1,8 @@
+import { School } from "@/types/global";
 import { MarkerIcon } from "../../icons/Marker";
 
 interface SchoolCardProps {
-  school: any;
+  school: School;
   onWantToRemoveSchool: VoidFunction;
 }
 

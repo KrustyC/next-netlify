@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { TextInput } from "../TextInput";
+import { Input } from "../Input";
 import { LoadingSpinner } from "../LoadingSpinner";
 
 interface SchoolFormProps {
@@ -27,18 +27,20 @@ export const SchoolForm: React.FC<SchoolFormProps> = ({
       onSubmit={handleSubmit(onSaveSchool)}
     >
       <div className="flex mb-8 w-full">
-        <TextInput
+        <Input
           register={register}
           label="Name"
+          type="text"
           name="name"
           placeholder="John Doe"
         />
       </div>
       <div className="flex mb-8">
-        <TextInput
+        <Input
           register={register}
           label="postcode"
           name="postcode"
+          type="text"
           placeholder="Postcode"
           width="w-1/2"
         />

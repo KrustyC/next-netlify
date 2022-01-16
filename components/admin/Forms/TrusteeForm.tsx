@@ -1,6 +1,6 @@
 import { Controller, useForm } from "react-hook-form";
 import { LoadingSpinner } from "../LoadingSpinner";
-import { TextInput } from "../TextInput";
+import { Input } from "../Input";
 import { Editor } from "../Editor";
 
 interface TrusteeFormProps {
@@ -29,7 +29,7 @@ export const TrusteeForm: React.FC<TrusteeFormProps> = ({
       onSubmit={handleSubmit(onSaveTrustee)}
     >
       <div className="flex mb-8 w-full">
-        <TextInput
+        <Input
           register={register}
           label="Name"
           name="name"

@@ -1,14 +1,20 @@
-interface TextInputProps {
+import type { RegisterOptions, UseFormRegister } from "react-hook-form";
+
+interface InputProps {
   name: string;
   label: string;
+  type: string;
   placeholder: string;
   width?: string;
-  register: any;
+  options?: RegisterOptions;
+  register: UseFormRegister<any>;
 }
 
-export const TextInput: React.FC<TextInputProps> = ({
+export const Input: React.FC<InputProps> = ({
   width = "",
   name,
+  type,
+  options = {},
   label,
   placeholder,
   register,
@@ -20,9 +26,9 @@ export const TextInput: React.FC<TextInputProps> = ({
       </label>
       <input
         id={name}
-        {...register(name)}
+        {...register(name, options)}
         placeholder={placeholder}
-        type="text"
+        type={type}
         className={`${width} shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
       />
     </div>

@@ -1,55 +1,32 @@
 import type { NextPage } from "next";
-import { ReactElement, useEffect } from "react";
-import { useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
+import { ReactElement } from "react";
 import { AdminLayout } from "@/components/admin/Layout";
 import { DeleteItemModal } from "@/components/admin/DeleteItemModal";
 import { IndexLayout } from "@/components/admin/IndexLayout";
 import { SchoolCard } from "@/components/admin/Cards/SchoolCard";
-import { useNetlifyGetFunction } from "@/hooks/useNetlifyGetFunction";
+import { LoadingSpinner } from "@/components/admin/LoadingSpinner";
+import { useAdminIndexList } from "@/hooks/useAdminIndexList";
 import { School } from "@/types/global";
 
 const AdminSchools: NextPage = () => {
-  const { user } = useAuth();
-  const { data, loading, error } = useNetlifyGetFunction<{ schools: School[] }>(
-    {
-      fetchUrlPath: "/admin-schools",
-      user,
-    }
-  );
-
-  const [schools, setSchools] = useState<School[]>([]);
-  const [schoolToRemoveIndex, setSchoolToRemoveIndex] = useState(-1);
-
-  useEffect(() => {
-    if (data?.schools) {
-      setSchools(data.schools);
-    }
-  }, [data?.schools]);
-
-  const onWantToRemoveSchool = (index: number) => {
-    setSchoolToRemoveIndex(index);
-  };
-
-  const onRemoveConfirmed = () => {
-    const updatedSchools = [
-      ...schools.slice(0, schoolToRemoveIndex),
-      ...schools.slice(schoolToRemoveIndex + 1),
-    ];
-
-    setSchoolToRemoveIndex(-1);
-    setSchools(updatedSchools);
-  };
-
-  const onRemoveCancelled = () => {
-    setSchoolToRemoveIndex(-1);
-  };
+  const {
+    items: schools,
+    loading,
+    error,
+    itemToRemoveIndex: schoolToRemoveIndex,
+    onWantToRemoveItem: onWantToRemoveSchool,
+    onRemoveConfirmed,
+    onRemoveCancelled,
+  } = useAdminIndexList<{ schools: School[] }, School>({
+    fetchPath: "/admin-schools",
+    parseResponse: (response) => response.schools,
+  });
 
   return (
     <div className="h-screen bg-admin-grey">
       <div className="flex flex-wrap">
         {loading ? (
-          <div>Loading...</div>
+          <LoadingSpinner />
         ) : (
           <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4">
             {schools.map((school, index) => (
