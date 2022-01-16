@@ -27,16 +27,3 @@ export const AuthenticatedView: React.FC<AuthenticatedViewProps> = ({
   </div>
 );
 
-{
-  /* <div className="flex justify-between items-center">
-            <h2 className="text-gray-600 font-bold">{title}</h2>
-
-            <a
-              href={createItemPath}
-              className="btn-admin btn-primary btn-sm text-base"
-            >
-              Add New {itemName}
-            </a>
-          </div>
-          <p className="text-gray-600">{subtitle}</p> */
-}

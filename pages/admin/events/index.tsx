@@ -1,9 +1,10 @@
 import type { NextPage } from "next";
 import type { ReactElement } from "react";
-import { AdminLayout } from "../../../components/admin/Layout";
-import { IndexLayout } from "../../../components/admin/IndexLayout";
-import { EventCard } from "../../../components/admin/Cards/EventCard";
-import { useNetlifyGetFunction } from "../../../hooks/useNetlifyGetFunction";
+import { IndexLayout } from "@/components/admin/IndexLayout";
+import { AdminLayout } from "@/components/admin/Layout";
+import { EventCard } from "@/components/admin/Cards/EventCard";
+import { useNetlifyGetFunction } from "@/hooks/useNetlifyGetFunction";
+import { useAuth } from "@/contexts/AuthContext";
 
 type Event = {
   _id: string;
@@ -11,8 +12,10 @@ type Event = {
 };
 
 const AdminEvents: NextPage = () => {
+  const { user } = useAuth();
   const { data, loading, error } = useNetlifyGetFunction<{ events: Event[] }>({
     fetchUrlPath: "/admin-events",
+    user,
   });
 
   const events = data?.events || [];

@@ -1,16 +1,6 @@
 import netlifyIdentity from "netlify-identity-widget";
-import { createContext, useState, useEffect } from "react";
-
-type NetlifyUser = {
-  user: { user_metadata: { full_name: string } };
-  token: {
-    access_token: string;
-    expires_at: string;
-    expires_in: string;
-    refresh_token: string;
-    token_type: string;
-  };
-};
+import { createContext, useContext, useState, useEffect } from "react";
+import { NetlifyUser } from "../types/auth";
 
 type AuthContextType = {
   user: NetlifyUser | null;
@@ -63,4 +53,14 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   return (
     <AuthContext.Provider value={context}>{children}</AuthContext.Provider>
   );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthContextProvider");
+  }
+
+  return context;
 };

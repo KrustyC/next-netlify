@@ -29,7 +29,7 @@ export const EventCard: React.FC<EventCardProps> = ({
             <CalendarIcon height="h-4" width="w-4" />
           </div>
           <span className="ml-1 text-sm text-gray-600">
-            {/* {formatDate(event.date.day)} / */}
+            {formatDate(event.date.day)} /
             {event.date.startTime ? (
               <>
                 <b>from</b>

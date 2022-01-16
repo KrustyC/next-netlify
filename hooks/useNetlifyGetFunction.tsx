@@ -1,9 +1,10 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchJson } from "../utils/fetch-json";
-import { AuthContext } from "../contexts/AuthContext";
+import { NetlifyUser } from "../types/auth";
 
 interface UseNetlifyFunctionProps {
   fetchUrlPath: string;
+  user?: NetlifyUser | null;
 }
 
 interface UseNetlifyFunctionReturn<T> {
@@ -14,13 +15,12 @@ interface UseNetlifyFunctionReturn<T> {
 
 export function useNetlifyGetFunction<T>({
   fetchUrlPath,
+  user,
 }: UseNetlifyFunctionProps): UseNetlifyFunctionReturn<T> {
   const [data, setData] = useState<T | undefined>();
-  const { user } = useContext(AuthContext);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error>();
-
-  console.log('process.env.BASE_URL', process.env.baseUrl);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,7 +46,7 @@ export function useNetlifyGetFunction<T>({
     if (user) {
       fetchData();
     }
-  }, [user, fetchUrlPath]);
+  }, [user]);
 
   return { data, loading, error };
 }

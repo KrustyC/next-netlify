@@ -1,14 +1,14 @@
-// import { variables } from "$lib/variables";
+import { REST_METHOD } from "../types/global";
 
-export type Options = {
-  method?: "GET" | "POST" | "PUT" | "DELETE";
+export type Options<Body> = {
+  method?: REST_METHOD;
   token?: string;
-  body?: Record<string, unknown>;
+  body?: Body;
 };
 
-export async function fetchJson(
+export async function fetchJson<Body>(
   url: string,
-  { method = "GET", token, body }: Options
+  { method = REST_METHOD.GET, token, body }: Options<Body>
 ) {
   const headers = {
     "Content-Type": "application/json",

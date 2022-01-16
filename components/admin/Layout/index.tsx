@@ -1,13 +1,9 @@
-import { useContext } from "react";
-import {
-  AuthContext,
-  AuthContextProvider,
-} from "../../../contexts/AuthContext";
+import { useAuth, AuthContextProvider } from "@/contexts/AuthContext";
 import { AuthenticatedView } from "./AuthenticatedView";
 import { UnauthenticatedView } from "./UnauthenticatedView";
 
 const AdminView: React.FC = ({ children }) => {
-  const { user, login, logout } = useContext(AuthContext);
+  const { user, login, logout } = useAuth();
 
   const isLoggedIn = user !== null;
 

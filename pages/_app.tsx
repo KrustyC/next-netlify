@@ -1,16 +1,3 @@
-// import { AuthContextProvider } from "../contexts/AuthContext";
-// import type { AppProps } from "next/app";
-
-// function MyApp({ Component, pageProps }: AppProps) {
-//   return (
-//     <AuthContextProvider>
-//       <Component {...pageProps} />
-//     </AuthContextProvider>
-//   );
-// }
-
-// export default MyApp;
-
 import "../styles/globals.css";
 import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
