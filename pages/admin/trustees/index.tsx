@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { AdminLayout } from "layouts/AdminLayout";
 import { DeleteItemModal } from "@/components/admin/DeleteItemModal";
 import { LoadingSpinner } from "@/components/admin/LoadingSpinner";
-import { IndexLayout } from "@/components/admin/IndexLayout";
+import { IndexLayout } from "@/layouts/AdminIndexLayout";
 import { TrusteeCard } from "@/components/admin/Cards/TrusteeCard";
 import { Trustee } from "@/types/global";
 import { useAdminIndexList } from "@/hooks/useAdminIndexList";

@@ -11,14 +11,14 @@ const ALLOWED_METHODS = ["GET", "DELETE"];
 async function get() {
   try {
     const params = {
-      Bucket: process.env.VITE_S3_OUR_HUT_BUCKET,
+      Bucket: process.env.S3_OUR_HUT_BUCKET,
       Prefix: FOLDERS.IMAGES,
     };
 
     const listObjects = await getAllS3Files(params);
 
     const imagesUrls = listObjects.Contents.map((file) => {
-      return `https://${process.env.VITE_S3_OUR_HUT_BUCKET}.s3.amazonaws.com/${file.Key}`;
+      return `https://${process.env.S3_OUR_HUT_BUCKET}.s3.amazonaws.com/${file.Key}`;
     });
 
     return jsonResponse({
@@ -40,7 +40,7 @@ async function deleteImage(event: HandlerEvent) {
     const { name } = event.queryStringParameters;
 
     const params = {
-      Bucket: process.env.VITE_S3_OUR_HUT_BUCKET,
+      Bucket: process.env.S3_OUR_HUT_BUCKET,
       Key: `${FOLDERS.IMAGES}/${name}`,
     };
 

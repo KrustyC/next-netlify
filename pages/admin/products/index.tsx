@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { AdminLayout } from "layouts/AdminLayout";
 import { DeleteItemModal } from "@/components/admin/DeleteItemModal";
 import { LoadingSpinner } from "@/components/admin/LoadingSpinner";
-import { IndexLayout } from "@/components/admin/IndexLayout";
+import { IndexLayout } from "@/layouts/AdminIndexLayout";
 import { ProductCard } from "@/components/admin/Cards/ProductCard";
 import { Product } from "@/types/global";
 import { useAdminIndexList } from "@/hooks/useAdminIndexList";
@@ -62,6 +62,7 @@ const AdminProducts: NextPage = () => {
 };
 
 (AdminProducts as any).getLayout = function getLayout(page: ReactElement) {
+  console.log("DIO CANE");
   return (
     <AdminLayout>
       <IndexLayout

@@ -30,7 +30,9 @@ const AdminSchoolsCreate: NextPage = () => {
   };
 
   useEffect(() => {
-    toast.error(updateError);
+    if (updateError) {
+      toast.error(updateError);
+    }
   }, [updateError]);
 
   return (

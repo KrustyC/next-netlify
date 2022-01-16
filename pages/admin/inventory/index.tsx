@@ -1,4 +1,7 @@
 import type { NextPage } from "next";
+import { ReactElement } from "react";
+import { AdminLayout } from "layouts/AdminLayout";
+import { IndexLayout } from "@/layouts/AdminIndexLayout";
 
 const AdminInventory: NextPage = () => {
   return (
@@ -8,6 +11,21 @@ const AdminInventory: NextPage = () => {
         In this section you can manage your whole inventory.
       </p>
     </div>
+  );
+};
+
+(AdminInventory as any).getLayout = function getLayout(page: ReactElement) {
+  return (
+    <AdminLayout>
+      <IndexLayout
+        title="Products"
+        subtitle="Here you can manage your products."
+        itemName="Product"
+        createItemPath="/admin/products/new"
+      >
+        {page}
+      </IndexLayout>
+    </AdminLayout>
   );
 };
 

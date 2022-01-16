@@ -35,7 +35,7 @@ const AdminDashboard: NextPage = () => {
       </div>
     );
   }
-  console.log(user);
+
   return (
     <div className="p-4">
       <h2 className="text-gray-600 font-bold">
@@ -51,10 +51,12 @@ const AdminDashboard: NextPage = () => {
           title={`${data.news} News`}
           link={{ path: "/admin/news", copy: "Manage News" }}
         />
+
         <SummaryCard
           title={`${data.projects} Projects`}
           link={{ path: "/admin/projects", copy: "Manage Projects" }}
         />
+
         <SummaryCard
           title={`${data.events} Events`}
           link={{ path: "/admin/events", copy: "Manage Events" }}

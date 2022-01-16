@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
 import { ReactElement, useEffect } from "react";
-import { AdminLayout } from "layouts/AdminLayout";
+import { AdminLayout } from "@/layouts/AdminLayout";
+import { IndexLayout } from "@/layouts/AdminIndexLayout";
 import { DeleteItemModal } from "@/components/admin/DeleteItemModal";
-import { IndexLayout } from "@/components/admin/IndexLayout";
 import { SchoolCard } from "@/components/admin/Cards/SchoolCard";
 import { LoadingSpinner } from "@/components/admin/LoadingSpinner";
 import { useAdminIndexList } from "@/hooks/useAdminIndexList";

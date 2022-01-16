@@ -18,7 +18,7 @@ async function get(client: MongoClient, handlerEvent: HandlerEvent) {
 
     if (id) {
       const trustee = await client
-        .db(process.env.VITE_MONGO_DB_NAME)
+        .db(process.env.MONGO_DB_NAME)
         .collection(TRUSTEES_COLLECTION)
         .findOne({ _id: new ObjectId(id) });
 
@@ -38,7 +38,7 @@ async function get(client: MongoClient, handlerEvent: HandlerEvent) {
     }
 
     const trustees = await client
-      .db(process.env.VITE_MONGO_DB_NAME)
+      .db(process.env.MONGO_DB_NAME)
       .collection(TRUSTEES_COLLECTION)
       .find()
       .toArray();
@@ -79,7 +79,7 @@ async function post(client: MongoClient, handlerEvent: HandlerEvent) {
     }
 
     const result = await client
-      .db(process.env.VITE_MONGO_DB_NAME)
+      .db(process.env.MONGO_DB_NAME)
       .collection(TRUSTEES_COLLECTION)
       .insertOne({
         ...trusteeDocument,
@@ -135,7 +135,7 @@ async function put(client: MongoClient, handlerEvent: HandlerEvent) {
     }
 
     await client
-      .db(process.env.VITE_MONGO_DB_NAME)
+      .db(process.env.MONGO_DB_NAME)
       .collection(TRUSTEES_COLLECTION)
       .findOneAndUpdate(
         {
@@ -180,7 +180,7 @@ async function deleteTrustee(client: MongoClient, handlerEvent: HandlerEvent) {
     }
 
     await client
-      .db(process.env.VITE_MONGO_DB_NAME)
+      .db(process.env.MONGO_DB_NAME)
       .collection(TRUSTEES_COLLECTION)
       .deleteMany({
         _id: new ObjectId(id),

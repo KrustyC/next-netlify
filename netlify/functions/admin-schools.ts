@@ -18,7 +18,7 @@ async function get(client: MongoClient, handlerEvent: HandlerEvent) {
 
     if (id) {
       const school = await client
-        .db(process.env.VITE_MONGO_DB_NAME)
+        .db(process.env.MONGO_DB_NAME)
         .collection(SCHOOLS_COLLECTION)
         .findOne({ _id: new ObjectId(id) });
 
@@ -38,7 +38,7 @@ async function get(client: MongoClient, handlerEvent: HandlerEvent) {
     }
 
     const schools = await client
-      .db(process.env.VITE_MONGO_DB_NAME)
+      .db(process.env.MONGO_DB_NAME)
       .collection(SCHOOLS_COLLECTION)
       .find()
       .toArray();
@@ -80,7 +80,7 @@ async function post(client: MongoClient, handlerEvent: HandlerEvent) {
     }
 
     const result = await client
-      .db(process.env.VITE_MONGO_DB_NAME)
+      .db(process.env.MONGO_DB_NAME)
       .collection(SCHOOLS_COLLECTION)
       .insertOne({
         ...schoolDocument,
@@ -140,7 +140,7 @@ async function put(client: MongoClient, handlerEvent: HandlerEvent) {
     }
 
     await client
-      .db(process.env.VITE_MONGO_DB_NAME)
+      .db(process.env.MONGO_DB_NAME)
       .collection(SCHOOLS_COLLECTION)
       .findOneAndUpdate(
         {
@@ -189,7 +189,7 @@ async function deleteSchool(
     }
 
     await client
-      .db(process.env.VITE_MONGO_DB_NAME)
+      .db(process.env.MONGO_DB_NAME)
       .collection(SCHOOLS_COLLECTION)
       .deleteMany({
         _id: new ObjectId(id),

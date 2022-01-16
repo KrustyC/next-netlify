@@ -25,7 +25,7 @@ const handler: Handler = async function (event, context) {
 
   // Get signed URL from S3
   const s3Params = {
-    Bucket: process.env.VITE_S3_OUR_HUT_BUCKET,
+    Bucket: process.env.S3_OUR_HUT_BUCKET,
     Key: `${folder}/${Key}`,
     Expires: URL_EXPIRATION_SECONDS,
     ContentType,

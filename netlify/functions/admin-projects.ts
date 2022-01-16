@@ -33,7 +33,7 @@ const ALLOWED_METHODS = ["GET", "POST"];
 async function get(client: MongoClient) {
   try {
     const projects = await client
-      .db(process.env.VITE_MONGO_DB_NAME)
+      .db(process.env.MONGO_DB_NAME)
       .collection("projects")
       .find()
       .toArray();
@@ -73,7 +73,7 @@ async function post(client: MongoClient, event: HandlerEvent) {
     }
 
     await client
-      .db(process.env.VITE_MONGO_DB_NAME)
+      .db(process.env.MONGO_DB_NAME)
       .collection("projects")
       .insertOne(projectDocument);
 
