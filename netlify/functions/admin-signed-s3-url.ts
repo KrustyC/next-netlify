@@ -4,8 +4,21 @@ import { getS3Client, FOLDERS } from "../shared/s3-client";
 
 const URL_EXPIRATION_SECONDS = 300;
 
+interface QueryStringParameters {
+  name?: string;
+  type?: string;
+  folder?: string;
+}
+
 const handler: Handler = async function (event, context) {
-  const { user } = context.clientContext;
+  if (event.httpMethod !== "GET") {
+    return jsonResponse({
+      status: 405,
+      body: { message: "Method not allowed" },
+    });
+  }
+
+  const { user } = context.clientContext as { user?: any };
 
   if (!user) {
     return jsonResponse({
@@ -14,14 +27,11 @@ const handler: Handler = async function (event, context) {
     });
   }
 
-  if (event.httpMethod !== "GET") {
-    return jsonResponse({
-      status: 405,
-      body: { message: "Method not allowed" },
-    });
-  }
-
-  const { name: Key, type: ContentType, folder } = event.queryStringParameters;
+  const {
+    name: Key,
+    type: ContentType,
+    folder,
+  } = event.queryStringParameters as QueryStringParameters;
 
   // Get signed URL from S3
   const s3Params = {

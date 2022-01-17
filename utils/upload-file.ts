@@ -31,7 +31,7 @@ export async function uploadFileToS3({
   folder = "images",
 }: UploadFileToS3Options) {
   const { uploadURL } = await fetchJson(
-    `/admin-signed-s3-url?name=${file.name}&type=${file.type}&folder=${folder}`,
+    `${process.env.baseUrl}/.netlify/functions/admin-signed-s3-url?name=${file.name}&type=${file.type}&folder=${folder}`,
     { method: REST_METHOD.GET, token }
   );
 

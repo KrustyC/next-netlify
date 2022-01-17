@@ -36,6 +36,7 @@ export function useNetlifyDeleteFunction<T>({
     } catch (error) {
       setError(error as Error);
       setPending(false);
+      return undefined;
     }
   };
 

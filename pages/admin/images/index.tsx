@@ -1,101 +1,31 @@
 import type { NextPage } from "next";
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useEffect } from "react";
 import { toast } from "react-toastify";
-import { useAuth } from "@/contexts/AuthContext";
 import { AdminLayout } from "@/layouts/AdminLayout";
+import { useAdminIndexFiles } from "@/hooks/useAdminIndexFiles";
 import { LoadingSpinner } from "@/components/admin/LoadingSpinner";
 import { ImageCard } from "@/components/admin/Cards/ImageCard";
-import { useNetlifyGetFunction } from "@/hooks/useNetlifyGetFunction";
-
-interface UseFilesProps {
-  fetchUrlPath: string;
-}
-
-const useFiles = ({ fetchUrlPath }: UseFilesProps) => {
-  const [files, setFiles] = useState<string[]>([]);
-  const { user } = useAuth();
-
-  const [fileSelectedForDetail, setFileSelectedForDetail] = useState<
-    string | null
-  >(null);
-  const [fileSelectedForRemove, setFileSelectedForRemove] = useState<
-    string | null
-  >(null);
-
-  const { data, loading, error } = useNetlifyGetFunction<{
-    [key: string]: string[];
-  }>({
-    fetchUrlPath,
-    user,
-  });
-
-  useEffect(() => {
-    if (!data || files.length > 0) {
-      return;
-    }
-
-    // const response = parseResponse(data);
-
-    setFiles(data.images);
-  }, [data]);
-
-  const onConfirmImageUpload = (newFile: string) => {
-    setFiles([...files, newFile]);
-  };
-
-  const onSelectFile = (index: number) => {
-    setFileSelectedForDetail(files[index]);
-  };
-
-  const onCancelView = () => {
-    setFileSelectedForDetail(null);
-  };
-
-  const onWantToDeleteImage = (index: number) => {
-    setFileSelectedForDetail(null);
-    setFileSelectedForRemove(files[index]);
-  };
-
-  const onDeleteSuccess = () => {
-    if (!fileSelectedForRemove) {
-      return;
-    }
-
-    const imageToDeleteIndex = files.indexOf(fileSelectedForRemove);
-    setFiles([
-      ...files.slice(0, imageToDeleteIndex),
-      ...files.slice(imageToDeleteIndex + 1),
-    ]);
-
-    setFileSelectedForRemove(null);
-  };
-
-  const onCancelDelete = () => {
-    setFileSelectedForRemove(null);
-  };
-
-  return {
-    files,
-    loading,
-    error,
-    fileSelectedForDetail,
-    fileSelectedForRemove,
-    onConfirmImageUpload,
-    onSelectFile,
-    onCancelView,
-    onWantToDeleteImage,
-    onDeleteSuccess,
-    onCancelDelete,
-  };
-};
+import { ViewImageModal } from "@/components/admin/Modals/ViewImageModal";
+import { DeleteImageModal } from "@/components/admin/Modals/DeleteImageModal";
+import { UploadImageButton } from "@/components/admin/UploadImageButton";
 
 const AdminImages: NextPage = () => {
   const {
     files: images,
     loading,
     onSelectFile: onSelectImage,
+    fileSelectedForDetail: imageSelectedForDetail,
+    fileSelectedForRemove: imageSelectedForRemove,
+    onConfirmImageUpload,
+    onCancelView,
+    onWantToDeleteImage,
+    onDeleteSuccess,
+    onCancelDelete,
     error,
-  } = useFiles({ fetchUrlPath: "/admin-images" });
+  } = useAdminIndexFiles<{ images: string[] }>({
+    fetchUrlPath: "/admin-images",
+    parseResponse: (response) => response.images,
+  });
 
   useEffect(() => {
     if (error) {
@@ -107,12 +37,11 @@ const AdminImages: NextPage = () => {
     <div className="p-4">
       <div className="flex justify-between items-center">
         <h2 className="text-gray-600 font-bold">Images</h2>
-        UPLOAD
-        {/* <UploadImageButton
-      actionCopy="Upload Image"
-      folder="images"
-      onConfirm={onConfirmImageUpload}
-    /> */}
+        <UploadImageButton
+          actionCopy="Upload Image"
+          folder="images"
+          onConfirm={onConfirmImageUpload}
+        />
       </div>
 
       <p className="text-gray-600">
@@ -135,22 +64,22 @@ const AdminImages: NextPage = () => {
           </>
         )}
       </div>
-      {/*
-  {#if selectedImageIndex !== undefined}
-    <ViewImageModal
-      image={images[selectedImageIndex]}
-      onClose={onCancelView}
-      onWantToDeleteImage={() => onWantToDeleteImage(selectedImageIndex)}
-    />
-  {/if}
 
-  {#if imageToDeleteIndex !== undefined}
-    <DeleteImageModal
-      imageToDelete={images[imageToDeleteIndex]}
-      onCancel={onCancelDelete}
-      onSuccess={onDeleteSuccess}
-    />
-  {/if} */}
+      {imageSelectedForDetail ? (
+        <ViewImageModal
+          image={imageSelectedForDetail}
+          onClose={onCancelView}
+          onWantToDeleteImage={onWantToDeleteImage}
+        />
+      ) : null}
+
+      {imageSelectedForRemove ? (
+        <DeleteImageModal
+          imageToDelete={imageSelectedForRemove}
+          onSuccess={onDeleteSuccess}
+          onCancel={onCancelDelete}
+        />
+      ) : null}
     </div>
   );
 };
