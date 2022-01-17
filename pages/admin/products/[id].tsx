@@ -5,11 +5,11 @@ import { useRouter } from "next/router";
 import { useAuth } from "@/contexts/AuthContext";
 import { AdminLayout } from "layouts/AdminLayout";
 import { LoadingSpinner } from "@/components/admin/LoadingSpinner";
-import { TrusteeForm } from "@/components/admin/Forms/TrusteeForm";
+import { ProductForm } from "@/components/admin/Forms/ProductForm";
 import { useNetlifyGetFunction } from "@/hooks/useNetlifyGetFunction";
 import { useNetlifyPutFunction } from "@/hooks/useNetlifyPutFunction";
 import { Panel } from "@/components/admin/Panel";
-import { Trustee } from "@/types/global";
+import { Product } from "@/types/global";
 
 interface EditProps {
   id: string;
@@ -19,8 +19,8 @@ const Edit: React.FC<EditProps> = ({ id }) => {
   const { user } = useAuth();
   const router = useRouter();
 
-  const { data, loading, error } = useNetlifyGetFunction<{ trustee: Trustee }>({
-    fetchUrlPath: `/admin-trustees?id=${id}`,
+  const { data, loading, error } = useNetlifyGetFunction<{ product: Product }>({
+    fetchUrlPath: `/admin-products?id=${id}`,
     user,
   });
 
@@ -28,14 +28,13 @@ const Edit: React.FC<EditProps> = ({ id }) => {
     onUpdate,
     pending,
     error: updateError,
-  } = useNetlifyPutFunction<{ trustee: Trustee }>({ user });
+  } = useNetlifyPutFunction<{ product: Product }>({ user });
 
-  const onEditTrustee = async (updatedTrustee: Trustee) => {
-    console.log("UPDAATED TRUSTEE", updatedTrustee);
-    await onUpdate(`/admin-trustees?id=${id}`, { trustee: updatedTrustee });
+  const onEditProduct = async (updatedProduct: Product) => {
+    await onUpdate(`/admin-products?id=${id}`, { product: updatedProduct });
 
     setTimeout(() => {
-      router.push("/admin/trustees");
+      router.push("/admin/products");
     }, 800);
   };
 
@@ -52,7 +51,7 @@ const Edit: React.FC<EditProps> = ({ id }) => {
   return (
     <div className="p-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-gray-600 font-bold">Edit Trustee</h2>
+        <h2 className="text-gray-600 font-bold">Edit Product</h2>
       </div>
 
       <div className="flex justify-between w-100 mt-4">
@@ -60,10 +59,10 @@ const Edit: React.FC<EditProps> = ({ id }) => {
           {loading ? (
             <LoadingSpinner />
           ) : (
-            <TrusteeForm
+            <ProductForm
               pending={pending}
-              trustee={data?.trustee}
-              onSaveTrustee={onEditTrustee}
+              product={data?.product}
+              onSaveProduct={onEditProduct}
             />
           )}
         </Panel>
@@ -72,7 +71,7 @@ const Edit: React.FC<EditProps> = ({ id }) => {
   );
 };
 
-const AdminTrusteesEdit: NextPage = () => {
+const AdminProductsEdit: NextPage = () => {
   const router = useRouter();
 
   const { id } = router.query as { id?: string };
@@ -84,8 +83,8 @@ const AdminTrusteesEdit: NextPage = () => {
   return <Edit id={id} />;
 };
 
-(AdminTrusteesEdit as any).getLayout = function getLayout(page: ReactElement) {
+(AdminProductsEdit as any).getLayout = function getLayout(page: ReactElement) {
   return <AdminLayout>{page}</AdminLayout>;
 };
 
-export default AdminTrusteesEdit;
+export default AdminProductsEdit;

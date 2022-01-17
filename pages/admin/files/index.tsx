@@ -1,7 +1,6 @@
 import type { NextPage } from "next";
 import { ReactElement } from "react";
 import { AdminLayout } from "layouts/AdminLayout";
-import { IndexLayout } from "@/layouts/AdminIndexLayout";
 
 const AdminFiles: NextPage = () => {
   return (
@@ -13,18 +12,7 @@ const AdminFiles: NextPage = () => {
 };
 
 (AdminFiles as any).getLayout = function getLayout(page: ReactElement) {
-  return (
-    <AdminLayout>
-      <IndexLayout
-        title="Products"
-        subtitle="Here you can manage your products."
-        itemName="Product"
-        createItemPath="/admin/products/new"
-      >
-        {page}
-      </IndexLayout>
-    </AdminLayout>
-  );
+  return <AdminLayout>{page}</AdminLayout>;
 };
 
 export default AdminFiles;

@@ -1,5 +1,6 @@
 import { Controller, useForm } from "react-hook-form";
 import { Product } from "@/types/global";
+import { ImageSelector } from "@/components/admin/ImageSelector";
 import { LoadingSpinner } from "../LoadingSpinner";
 import { Input } from "../Input";
 import { Editor } from "../Editor";
@@ -48,28 +49,24 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           <div className="mb-4">
             <Controller
               name="price"
-              render={(props) => (
-                <input
-                  type="number"
-                  name="price"
-                  placeholder="Product price (in gbp)"
-                  {...props}
-                  onChange={(e) => {
-                    props.field.onChange(parseInt(e.target.value, 10));
-                  }}
-                />
+              render={({ field: { onChange, value, ...rest } }) => (
+                <div className="flex flex-col">
+                  <label className="uppercase block text-gray-700 text-sm font-bold mb-2">
+                    Price (in gbp)
+                  </label>
+                  <input
+                    className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="number"
+                    placeholder="Product price (in gbp)"
+                    {...rest}
+                    value={value as number}
+                    onChange={(e) => {
+                      onChange(parseInt(e.target.value, 10));
+                    }}
+                  />
+                </div>
               )}
               control={control}
-            />
-            <Input
-              register={register}
-              options={{
-                valueAsNumber: true,
-              }}
-              label="price"
-              name="price"
-              type="number"
-              placeholder="Product price (in gbp)"
             />
           </div>
 
@@ -88,8 +85,19 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           <span className="uppercase block text-gray-700 text-sm font-bold mb-2">
             Image
           </span>
-          IMAGE SELECTOR
-          {/* <ImageSelector bind:image={$product.image} /> */}
+
+          <Controller
+            name="image"
+            render={(props) => (
+              <ImageSelector
+                currentImage={props.field.value}
+                onSelectImage={(image) => {
+                  props.field.onChange(image);
+                }}
+              />
+            )}
+            control={control}
+          />
         </div>
       </div>
 

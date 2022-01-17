@@ -1,5 +1,7 @@
 import type { NextPage } from "next";
 import type { ReactElement } from "react";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 import { useAuth } from "@/contexts/AuthContext";
 import { AdminLayout } from "layouts/AdminLayout";
 import { ProductForm } from "@/components/admin/Forms/ProductForm";
@@ -21,10 +23,18 @@ const AdminProductsCreate: NextPage = () => {
   const onCreateProduct = async (product: Product) => {
     await onCreate(`/admin-products`, { product });
 
+    toast.success("Product successfully added!");
+
     setTimeout(() => {
       router.push("/admin/products");
     }, 800);
   };
+
+  useEffect(() => {
+    if (updateError) {
+      toast.error(updateError);
+    }
+  }, [updateError]);
 
   return (
     <div className="p-4">
