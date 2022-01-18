@@ -38,6 +38,8 @@ export function useNetlifyPostFunction<T>({
       setError(error as Error);
       setPending(false);
     }
+
+    return undefined;
   };
 
   return { onCreate, pending, error };

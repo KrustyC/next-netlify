@@ -4,58 +4,59 @@ import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { useAuth } from "@/contexts/AuthContext";
 import { AdminLayout } from "layouts/AdminLayout";
-import { ProductForm } from "@/components/admin/Forms/ProductForm";
+import { EventForm } from "@/components/admin/Forms/EventForm";
 import { Panel } from "@/components/admin/Panel";
 import { useNetlifyPostFunction } from "@/hooks/useNetlifyPostFunction";
-import { Product } from "@/types/global";
+import { Event } from "@/types/global";
 import { useRouter } from "next/router";
 
-const AdminProductsCreate: NextPage = () => {
+const AdminEventsCreate: NextPage = () => {
   const { user } = useAuth();
   const router = useRouter();
 
   const {
     onCreate,
     pending,
-    error: updateError,
-  } = useNetlifyPostFunction<{ product: Product }>({ user });
+    error: createError,
+  } = useNetlifyPostFunction<{ event: Event; status: "publish" | "draft" }>({
+    user,
+  });
 
-  const onCreateProduct = async (product: Product) => {
-    const res = await onCreate(`/admin-products`, { product });
+  const onCreateEvent = async (event: Event, status: "publish" | "draft") => {
+    console.log("CALLED");
+    const res = await onCreate(`/admin-events`, { event, status });
 
     if (res !== undefined) {
-      toast.success("Product successfully added!");
+      toast.success("Event successfully added!");
       setTimeout(() => {
-        router.push("/admin/products");
+        router.push("/admin/events");
       }, 800);
     }
   };
 
   useEffect(() => {
-    if (updateError) {
-      toast.error(updateError);
+    if (createError) {
+      toast.error(createError);
     }
-  }, [updateError]);
+  }, [createError]);
 
   return (
     <div className="p-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-gray-600 font-bold">Create Product</h2>
+        <h2 className="text-gray-600 font-bold">Create Event</h2>
       </div>
 
       <div className="flex justify-between w-100 mt-4">
         <Panel className="mr-4 sm:w-full xl:w-8/12 ">
-          <ProductForm pending={pending} onSaveProduct={onCreateProduct} />
+          <EventForm pending={pending} onSaveEvent={onCreateEvent} />
         </Panel>
       </div>
     </div>
   );
 };
 
-(AdminProductsCreate as any).getLayout = function getLayout(
-  page: ReactElement
-) {
+(AdminEventsCreate as any).getLayout = function getLayout(page: ReactElement) {
   return <AdminLayout>{page}</AdminLayout>;
 };
 
-export default AdminProductsCreate;
+export default AdminEventsCreate;

@@ -1,29 +1,34 @@
 import type { NextPage } from "next";
 import type { ReactElement } from "react";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 import { IndexLayout } from "@/layouts/AdminIndexLayout";
+import { DeleteItemModal } from "@/components/admin/DeleteItemModal";
 import { AdminLayout } from "@/layouts/AdminLayout";
 import { LoadingSpinner } from "@/components/admin/LoadingSpinner";
 import { EventCard } from "@/components/admin/Cards/EventCard";
-import { useNetlifyGetFunction } from "@/hooks/useNetlifyGetFunction";
-import { useAuth } from "@/contexts/AuthContext";
-
-type Event = {
-  _id: string;
-  title: string;
-};
+import { Event } from "@/types/global";
+import { useAdminIndexList } from "@/hooks/useAdminIndexList";
 
 const AdminEvents: NextPage = () => {
-  const { user } = useAuth();
-  const { data, loading, error } = useNetlifyGetFunction<{ events: Event[] }>({
-    fetchUrlPath: "/admin-events",
-    user,
+  const {
+    items: events,
+    loading,
+    error,
+    itemToRemoveIndex: eventToRemoveIndex,
+    onWantToRemoveItem: onWantToRemoveEvent,
+    onRemoveConfirmed,
+    onRemoveCancelled,
+  } = useAdminIndexList<{ events: Event[] }, Event>({
+    fetchPath: "/admin-events",
+    parseResponse: (response) => response.events,
   });
 
-  const events = data?.events || [];
-
-  const onWantToRemoveEvent = (index: number) => {
-    console.log("onWantToRemoveEvent of index:", index);
-  };
+  useEffect(() => {
+    if (error) {
+      toast.error("Error fetching events");
+    }
+  }, [error]);
 
   return (
     <div className="h-screen bg-admin-grey">
@@ -42,6 +47,17 @@ const AdminEvents: NextPage = () => {
           </div>
         )}
       </div>
+
+      {eventToRemoveIndex > -1 ? (
+        <DeleteItemModal
+          itemGenericName="event"
+          itemToDelete={events[eventToRemoveIndex]}
+          questionItem={events[eventToRemoveIndex].title}
+          deletePath={`/admin-events?id=${events[eventToRemoveIndex]._id}`}
+          onSuccess={onRemoveConfirmed}
+          onCancel={onRemoveCancelled}
+        />
+      ) : null}
     </div>
   );
 };

@@ -8,7 +8,7 @@ interface EditorProps {
   onChange: (content: JSONContent) => void;
 }
 
-export const Editor: React.FC<EditorProps> = ({ value = "", onChange }) => {
+export const Editor: React.FC<EditorProps> = ({ value, onChange }) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -16,7 +16,7 @@ export const Editor: React.FC<EditorProps> = ({ value = "", onChange }) => {
         element: document.querySelector(".bubble-menu") as any,
       }),
     ],
-    content: value,
+    content: value === null || Object.keys(value).length === 0 ? null : value,
     onUpdate({ editor }) {
       onChange(editor.getJSON());
     },

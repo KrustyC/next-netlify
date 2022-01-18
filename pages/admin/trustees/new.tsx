@@ -21,13 +21,14 @@ const AdminTrusteesCreate: NextPage = () => {
   } = useNetlifyPostFunction<{ trustee: Trustee }>({ user });
 
   const onCreateTrustee = async (trustee: Trustee) => {
-    await onCreate(`/admin-trustees`, { trustee });
+    const res = await onCreate(`/admin-trustees`, { trustee });
 
-    toast.success("Trustee successfully added to the database!");
-
-    setTimeout(() => {
-      router.push("/admin/trustees");
-    }, 800);
+    if (res !== undefined) {
+      toast.success("Trustee successfully added to the database!");
+      setTimeout(() => {
+        router.push("/admin/trustees");
+      }, 800);
+    }
   };
 
   useEffect(() => {

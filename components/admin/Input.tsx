@@ -2,7 +2,7 @@ import type { RegisterOptions, UseFormRegister } from "react-hook-form";
 
 interface InputProps {
   name: string;
-  label: string;
+  label?: string;
   type: string;
   placeholder: string;
   width?: string;
@@ -21,9 +21,11 @@ export const Input: React.FC<InputProps> = ({
 }) => {
   return (
     <div className={`flex flex-col ${width}`}>
-      <label className="uppercase block text-gray-700 text-sm font-bold mb-2">
-        {label}
-      </label>
+      {label ? (
+        <label className="uppercase block text-gray-700 text-sm font-bold mb-2">
+          {label}
+        </label>
+      ) : null}
       <input
         id={name}
         {...register(name, options)}

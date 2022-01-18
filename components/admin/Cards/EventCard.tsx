@@ -17,7 +17,7 @@ export const EventCard: React.FC<EventCardProps> = ({
 }) => {
   const bgColor = event.isPublished ? "bg-green-500" : "bg-yellow-300";
   const fontColor = event.isPublished ? "text-white" : "text-black";
-  const copy = event.isPublished ? "published" : "draft";
+  const copy = event.isPublished ? "publish" : "draft";
 
   return (
     <div className="bg-white shadow rounded-lg p-4 ">

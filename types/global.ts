@@ -14,7 +14,7 @@ export type School = {
 export type Product = {
   _id?: string;
   name: string;
-  description: { [x: string]: {} | undefined; };
+  description: { [x: string]: {} | undefined };
   image: string;
   price: number | null;
   etsyLink: string;
@@ -24,4 +24,23 @@ export type Trustee = {
   _id?: string;
   name: string;
   postcode: string;
+};
+
+export type Event = {
+  _id?: string;
+  title: string;
+  image: string;
+  description: { [x: string]: {} | undefined };
+  eventbriteLink: string;
+  date: {
+    day: string;
+    startTime: {
+      time: string;
+      period: "AM" | "PM";
+    };
+    endTime: {
+      time: string;
+      period: "AM" | "PM";
+    };
+  };
 };

@@ -20,13 +20,14 @@ const AdminSchoolsCreate: NextPage = () => {
   } = useNetlifyPostFunction<{ school: School }>({ user });
 
   const onCreateSchool = async (school: School) => {
-    await onCreate(`/admin-schools`, { school });
+    const res = await onCreate(`/admin-schools`, { school });
 
-    toast.success("School successfully created!");
-
-    setTimeout(() => {
-      router.push("/admin/schools");
-    }, 800);
+    if (res !== undefined) {
+      toast.success("School successfully created!");
+      setTimeout(() => {
+        router.push("/admin/schools");
+      }, 800);
+    }
   };
 
   useEffect(() => {
