@@ -17,8 +17,6 @@ const Home: NextPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log("DIO LUPO");
-
   return (
     <div className={styles.container}>
       <Head>

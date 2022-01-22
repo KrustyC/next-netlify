@@ -23,7 +23,7 @@ const AdminEventsCreate: NextPage = () => {
   });
 
   const onCreateEvent = async (event: Event, status: "publish" | "draft") => {
-    console.log("CALLED");
+    console.log("CRETE HE EVNT");
     const res = await onCreate(`/admin-events`, { event, status });
 
     if (res !== undefined) {

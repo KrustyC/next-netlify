@@ -3,7 +3,14 @@ import { Event } from "@/types/global";
 import { ImageSelector } from "@/components/admin/ImageSelector";
 import { DayPicker } from "@/components/admin/DayPicker";
 import { TimePeriodSelector } from "@/components/admin/TimePeriodSelector";
+import {
+  isValidTime,
+  isValidURL,
+  isValidDate,
+  isValidDescription,
+} from "@/utils/validators";
 import { LoadingSpinner } from "../LoadingSpinner";
+import { InputErrorMessage } from "../InputErrorMessage";
 import { Input } from "../Input";
 import { Editor } from "../Editor";
 
@@ -37,17 +44,26 @@ export const EventForm: React.FC<EventFormProps> = ({
   pending,
   onSaveEvent,
 }) => {
-  const { register, control, handleSubmit } = useForm<Event>({
+  const {
+    register,
+    control,
+    formState: { errors, isValid },
+    handleSubmit,
+  } = useForm<Event>({
     defaultValues: { ...product },
+    mode: "onBlur",
   });
 
   const onSaveDraft = () => {
+    console.log("SAVE DRAFT");
     handleSubmit((data) => onSaveEvent(data, "draft"))();
   };
 
   const onPublish = () => {
     handleSubmit((data) => onSaveEvent(data, "publish"))();
   };
+
+  console.log(errors, isValid);
 
   return (
     <form className="flex flex-col w-full">
@@ -56,6 +72,8 @@ export const EventForm: React.FC<EventFormProps> = ({
           <div className="mb-4">
             <Input
               register={register}
+              options={{ required: "Please add a title" }}
+              error={errors.title}
               label="Title"
               name="title"
               type="title"
@@ -70,12 +88,14 @@ export const EventForm: React.FC<EventFormProps> = ({
 
             <Controller
               name="date.day"
+              rules={{ required: true, validate: isValidDate }}
               render={(props) => (
                 <DayPicker
                   value={props.field.value}
-                  onBlur={props.field.onBlur}
+                  error={errors?.date?.day}
                   onChange={(newDate) => {
                     props.field.onChange(newDate);
+                    props.field.onBlur();
                   }}
                 />
               )}
@@ -91,6 +111,12 @@ export const EventForm: React.FC<EventFormProps> = ({
               <div className="flex">
                 <Input
                   register={register}
+                  options={{
+                    required: "Please add start time",
+                    validate: isValidTime,
+                  }}
+                  error={errors?.date?.startTime?.time}
+                  hideErrorMessage
                   name="date.startTime.time"
                   type="text"
                   width="w-24"
@@ -102,6 +128,11 @@ export const EventForm: React.FC<EventFormProps> = ({
                   register={register}
                 />
               </div>
+              {errors?.date?.startTime?.time ? (
+                <InputErrorMessage
+                  message={errors.date.startTime.time.message || ""}
+                />
+              ) : null}
             </div>
 
             <div className="flex flex-col">
@@ -111,6 +142,12 @@ export const EventForm: React.FC<EventFormProps> = ({
               <div className="flex">
                 <Input
                   register={register}
+                  options={{
+                    required: "Please add end time",
+                    validate: isValidTime,
+                  }}
+                  error={errors?.date?.endTime?.time}
+                  hideErrorMessage
                   name="date.endTime.time"
                   type="text"
                   width="w-24"
@@ -122,12 +159,18 @@ export const EventForm: React.FC<EventFormProps> = ({
                   register={register}
                 />
               </div>
+              {errors?.date?.endTime?.time ? (
+                <InputErrorMessage
+                  message={errors.date.endTime.time.message || ""}
+                />
+              ) : null}
             </div>
           </div>
 
           <div>
             <Input
               register={register}
+              error={errors?.eventbriteLink}
               type="url"
               label="EventBrite Link"
               name="eventbriteLink"
@@ -143,9 +186,12 @@ export const EventForm: React.FC<EventFormProps> = ({
 
           <Controller
             name="image"
+            rules={{ required: "Please make sure to add an image" }}
             render={(props) => (
               <ImageSelector
                 currentImage={props.field.value}
+                error={errors?.image}
+                onBlur={() => props.field.onBlur()}
                 onSelectImage={(image) => {
                   props.field.onChange(image);
                 }}
@@ -164,8 +210,14 @@ export const EventForm: React.FC<EventFormProps> = ({
           <Controller
             control={control}
             name="description"
-            render={({ field: { onChange, value } }) => (
-              <Editor value={value} onChange={onChange} />
+            rules={{ validate: isValidDescription }}
+            render={({ field: { onBlur, onChange, value } }) => (
+              <Editor
+                value={value}
+                error={errors?.description as any}
+                onChange={onChange}
+                onBlur={onBlur}
+              />
             )}
           />
         </div>
@@ -176,7 +228,7 @@ export const EventForm: React.FC<EventFormProps> = ({
           className="btn-admin btn-primary mr-4"
           type="button"
           onClick={onSaveDraft}
-          disabled={pending} // @TODO Check from react hook form
+          disabled={pending || !isValid}
         >
           {pending ? <LoadingSpinner /> : "Save Draft"}
         </button>
@@ -185,7 +237,7 @@ export const EventForm: React.FC<EventFormProps> = ({
           className="btn-admin btn-outlined-primary mr-4"
           type="button"
           onClick={onPublish}
-          disabled={pending} // @TODO Check from react hook form
+          disabled={pending || !isValid}
         >
           {pending ? <LoadingSpinner /> : "Published Event"}
         </button>

@@ -62,7 +62,6 @@ const AdminProducts: NextPage = () => {
 };
 
 (AdminProducts as any).getLayout = function getLayout(page: ReactElement) {
-  console.log("DIO CANE");
   return (
     <AdminLayout>
       <IndexLayout
