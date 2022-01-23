@@ -23,11 +23,12 @@ export type Product = {
 export type Trustee = {
   _id?: string;
   name: string;
-  postcode: string;
+  description: { [x: string]: {} | undefined };
 };
 
 export type Event = {
   _id?: string;
+  slug?: string;
   title: string;
   image: string;
   description: { [x: string]: {} | undefined };

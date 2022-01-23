@@ -1,17 +1,20 @@
 import { Controller, useForm } from "react-hook-form";
+import { Trustee } from "@/types/global";
+import { isValidDescription } from "@/utils/validators";
 import { LoadingSpinner } from "../LoadingSpinner";
 import { Input } from "../Input";
 import { Editor } from "../Editor";
 
 interface TrusteeFormProps {
   className?: string;
-  trustee?: any;
+  trustee?: Trustee;
   pending?: boolean;
-  onSaveTrustee: (trustee: any) => void;
+  onSaveTrustee: (trustee: Trustee) => void;
 }
 
-const DEFAULT_TRUSTEE = {
+const DEFAULT_TRUSTEE: Trustee = {
   name: "",
+  description: {},
 };
 
 export const TrusteeForm: React.FC<TrusteeFormProps> = ({
@@ -19,7 +22,12 @@ export const TrusteeForm: React.FC<TrusteeFormProps> = ({
   pending,
   onSaveTrustee,
 }) => {
-  const { register, control, handleSubmit } = useForm({
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { isDirty, errors, isValid },
+  } = useForm<Trustee>({
     defaultValues: { ...trustee },
   });
 
@@ -31,8 +39,11 @@ export const TrusteeForm: React.FC<TrusteeFormProps> = ({
       <div className="flex mb-8 w-full">
         <Input
           register={register}
+          options={{ required: "Please add a postcode" }}
+          error={errors.name}
           label="Name"
           name="name"
+          type="text"
           placeholder="John Doe"
         />
       </div>
@@ -45,8 +56,14 @@ export const TrusteeForm: React.FC<TrusteeFormProps> = ({
           <Controller
             control={control}
             name="description"
-            render={({ field: { onChange, value } }) => (
-              <Editor value={value} onChange={onChange} />
+            rules={{ validate: isValidDescription }}
+            render={({ field: { onBlur, onChange, value } }) => (
+              <Editor
+                value={value}
+                error={errors?.description as any}
+                onChange={onChange}
+                onBlur={onBlur}
+              />
             )}
           />
         </div>
@@ -56,14 +73,10 @@ export const TrusteeForm: React.FC<TrusteeFormProps> = ({
         <button
           className="btn-admin btn-primary mr-4"
           type="submit"
-          disabled={pending} // @TODO Check from react hook form
+          disabled={pending || !isValid || !isDirty}
         >
           {pending ? <LoadingSpinner /> : "Save Trustee"}
         </button>
-
-        {/* {#if error !== undefined}
-      <AlertErrorBox {error} />
-    {/if} */}
       </div>
     </form>
   );

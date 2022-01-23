@@ -5,7 +5,6 @@ import { DayPicker } from "@/components/admin/DayPicker";
 import { TimePeriodSelector } from "@/components/admin/TimePeriodSelector";
 import {
   isValidTime,
-  isValidURL,
   isValidDate,
   isValidDescription,
 } from "@/utils/validators";
@@ -16,9 +15,9 @@ import { Editor } from "../Editor";
 
 interface EventFormProps {
   className?: string;
-  product?: Event;
+  event?: Event;
   pending?: boolean;
-  onSaveEvent: (product: Event, status: "publish" | "draft") => void;
+  onSaveEvent: (event: Event, status: "publish" | "draft") => void;
 }
 
 const DEFAULT_EVENT: Event = {
@@ -40,30 +39,27 @@ const DEFAULT_EVENT: Event = {
 };
 
 export const EventForm: React.FC<EventFormProps> = ({
-  product = DEFAULT_EVENT,
+  event = DEFAULT_EVENT,
   pending,
   onSaveEvent,
 }) => {
   const {
     register,
     control,
-    formState: { errors, isValid },
+    formState: { isDirty, errors, isValid },
     handleSubmit,
   } = useForm<Event>({
-    defaultValues: { ...product },
+    defaultValues: { ...event },
     mode: "onBlur",
   });
 
   const onSaveDraft = () => {
-    console.log("SAVE DRAFT");
     handleSubmit((data) => onSaveEvent(data, "draft"))();
   };
 
   const onPublish = () => {
     handleSubmit((data) => onSaveEvent(data, "publish"))();
   };
-
-  console.log(errors, isValid);
 
   return (
     <form className="flex flex-col w-full">
@@ -228,7 +224,7 @@ export const EventForm: React.FC<EventFormProps> = ({
           className="btn-admin btn-primary mr-4"
           type="button"
           onClick={onSaveDraft}
-          disabled={pending || !isValid}
+          disabled={pending || !isValid || !isDirty}
         >
           {pending ? <LoadingSpinner /> : "Save Draft"}
         </button>
@@ -237,7 +233,7 @@ export const EventForm: React.FC<EventFormProps> = ({
           className="btn-admin btn-outlined-primary mr-4"
           type="button"
           onClick={onPublish}
-          disabled={pending || !isValid}
+          disabled={pending || !isValid || !isDirty}
         >
           {pending ? <LoadingSpinner /> : "Published Event"}
         </button>

@@ -31,13 +31,17 @@ const Edit: React.FC<EditProps> = ({ id }) => {
   } = useNetlifyPutFunction<{ trustee: Trustee }>({ user });
 
   const onEditTrustee = async (updatedTrustee: Trustee) => {
-    await onUpdate(`/admin-trustees?id=${id}`, { trustee: updatedTrustee });
+    const res = await onUpdate(`/admin-trustees?id=${id}`, {
+      trustee: updatedTrustee,
+    });
 
-    toast.success("Trustee successfully updated");
+    if (res !== undefined) {
+      toast.success("Trustee successfully updated");
 
-    setTimeout(() => {
-      router.push("/admin/trustees");
-    }, 800);
+      setTimeout(() => {
+        router.push("/admin/trustees");
+      }, 800);
+    }
   };
 
   useEffect(() => {

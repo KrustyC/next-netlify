@@ -1,6 +1,7 @@
 import { Controller, useForm } from "react-hook-form";
 import { Product } from "@/types/global";
 import { ImageSelector } from "@/components/admin/ImageSelector";
+import { isValidDescription } from "@/utils/validators";
 import { LoadingSpinner } from "../LoadingSpinner";
 import { Input } from "../Input";
 import { Editor } from "../Editor";
@@ -25,9 +26,17 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   pending,
   onSaveProduct,
 }) => {
-  const { register, control, handleSubmit } = useForm<Product>({
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { isDirty, errors, isValid },
+  } = useForm<Product>({
     defaultValues: { ...product },
+    mode: "onBlur",
   });
+
+  console.log(errors, isValid);
 
   return (
     <form
@@ -39,6 +48,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           <div className="mb-4">
             <Input
               register={register}
+              options={{ required: "Please add a name" }}
+              error={errors.name}
               label="Name"
               name="name"
               type="text"
@@ -49,19 +60,23 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           <div className="mb-4">
             <Controller
               name="price"
+              rules={{ required: true }}
               render={({ field: { onChange, value, ...rest } }) => (
                 <div className="flex flex-col">
                   <label className="uppercase block text-gray-700 text-sm font-bold mb-2">
                     Price (in gbp)
                   </label>
                   <input
-                    className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className={`shadow appearance-none border ${
+                      errors?.price ? "border-red-500" : ""
+                    } rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
                     type="number"
                     placeholder="Product price (in gbp)"
                     {...rest}
                     value={value as number}
                     onChange={(e) => {
-                      onChange(parseInt(e.target.value, 10));
+                      const val = parseInt(e.target.value, 10);
+                      onChange(isNaN(val) ? 0 : val);
                     }}
                   />
                 </div>
@@ -73,6 +88,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           <div>
             <Input
               register={register}
+              options={{ required: "Please add an Etsy Link" }}
+              error={errors.etsyLink}
               type="url"
               label="Etsy Link"
               name="etsyLink"
@@ -88,9 +105,12 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
           <Controller
             name="image"
+            rules={{ required: "Please make sure to add an image" }}
             render={(props) => (
               <ImageSelector
                 currentImage={props.field.value}
+                error={errors?.image}
+                onBlur={() => props.field.onBlur()}
                 onSelectImage={(image) => {
                   props.field.onChange(image);
                 }}
@@ -109,8 +129,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           <Controller
             control={control}
             name="description"
-            render={({ field: { onChange, value } }) => (
-              <Editor value={value} onChange={onChange} />
+            rules={{ validate: isValidDescription }}
+            render={({ field: { value, onChange, onBlur } }) => (
+              <Editor
+                value={value}
+                error={errors?.description as any}
+                onChange={onChange}
+                onBlur={onBlur}
+              />
             )}
           />
         </div>
@@ -120,7 +146,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         <button
           className="btn-admin btn-primary mr-4"
           type="submit"
-          disabled={pending} // @TODO Check from react hook form
+          disabled={pending || !isValid || !isDirty}
         >
           {pending ? <LoadingSpinner /> : "Save Product"}
         </button>

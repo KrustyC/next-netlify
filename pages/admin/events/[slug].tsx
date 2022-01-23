@@ -5,22 +5,22 @@ import { useRouter } from "next/router";
 import { useAuth } from "@/contexts/AuthContext";
 import { AdminLayout } from "layouts/AdminLayout";
 import { LoadingSpinner } from "@/components/admin/LoadingSpinner";
-import { ProductForm } from "@/components/admin/Forms/ProductForm";
+import { EventForm } from "@/components/admin/Forms/EventForm";
 import { useNetlifyGetFunction } from "@/hooks/useNetlifyGetFunction";
 import { useNetlifyPutFunction } from "@/hooks/useNetlifyPutFunction";
 import { Panel } from "@/components/admin/Panel";
-import { Product } from "@/types/global";
+import { Event } from "@/types/global";
 
 interface EditProps {
-  id: string;
+  slug: string;
 }
 
-const Edit: React.FC<EditProps> = ({ id }) => {
+const Edit: React.FC<EditProps> = ({ slug }) => {
   const { user } = useAuth();
   const router = useRouter();
 
-  const { data, loading, error } = useNetlifyGetFunction<{ product: Product }>({
-    fetchUrlPath: `/admin-products?id=${id}`,
+  const { data, loading, error } = useNetlifyGetFunction<{ event: Event }>({
+    fetchUrlPath: `/admin-events?slug=${slug}`,
     user,
   });
 
@@ -28,39 +28,41 @@ const Edit: React.FC<EditProps> = ({ id }) => {
     onUpdate,
     pending,
     error: updateError,
-  } = useNetlifyPutFunction<{ product: Product }>({ user });
+  } = useNetlifyPutFunction<{ event: Event; status: "publish" | "draft" }>({
+    user,
+  });
 
-  const onEditProduct = async (updatedProduct: Product) => {
-    const res = await onUpdate(`/admin-products?id=${id}`, {
-      product: updatedProduct,
+  const onEditEvent = async (
+    updatedEvent: Event,
+    status: "publish" | "draft"
+  ) => {
+    const res = await onUpdate(`/admin-events?slug=${slug}`, {
+      event: updatedEvent,
+      status,
     });
 
     if (res !== undefined) {
-      toast.success("Product successfully updated!");
+      toast.success("Event successfully updated!");
       setTimeout(() => {
-        router.push("/admin/products");
+        router.push("/admin/events");
       }, 800);
     }
-
-    setTimeout(() => {
-      router.push("/admin/products");
-    }, 800);
   };
 
   useEffect(() => {
     if (error) {
-      toast.error("Error fetching product");
+      toast.error("Error fetching event");
     }
 
     if (updateError) {
-      toast.error("Error updating product");
+      toast.error("Error updating event");
     }
   }, [error, updateError]);
 
   return (
     <div className="p-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-gray-600 font-bold">Edit Product</h2>
+        <h2 className="text-gray-600 font-bold">Edit Event</h2>
       </div>
 
       <div className="flex justify-between w-100 mt-4">
@@ -68,10 +70,10 @@ const Edit: React.FC<EditProps> = ({ id }) => {
           {loading ? (
             <LoadingSpinner />
           ) : (
-            <ProductForm
+            <EventForm
               pending={pending}
-              product={data?.product}
-              onSaveProduct={onEditProduct}
+              event={data?.event}
+              onSaveEvent={onEditEvent}
             />
           )}
         </Panel>
@@ -80,20 +82,20 @@ const Edit: React.FC<EditProps> = ({ id }) => {
   );
 };
 
-const AdminProductsEdit: NextPage = () => {
+const AdminEventsEdit: NextPage = () => {
   const router = useRouter();
 
-  const { id } = router.query as { id?: string };
+  const { slug } = router.query as { slug?: string };
 
-  if (!id) {
+  if (!slug) {
     return null;
   }
 
-  return <Edit id={id} />;
+  return <Edit slug={slug} />;
 };
 
-(AdminProductsEdit as any).getLayout = function getLayout(page: ReactElement) {
+(AdminEventsEdit as any).getLayout = function getLayout(page: ReactElement) {
   return <AdminLayout>{page}</AdminLayout>;
 };
 
-export default AdminProductsEdit;
+export default AdminEventsEdit;

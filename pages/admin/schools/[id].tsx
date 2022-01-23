@@ -31,13 +31,17 @@ const Edit: React.FC<EditProps> = ({ id }) => {
   } = useNetlifyPutFunction<{ school: School }>({ user });
 
   const onEditSchool = async (updatedSchool: School) => {
-    await onUpdate(`/admin-schools?id=${id}`, { school: updatedSchool });
+    const res = await onUpdate(`/admin-schools?id=${id}`, {
+      school: updatedSchool,
+    });
 
-    toast.success("School successfully updated");
+    if (res !== undefined) {
+      toast.success("School successfully updated");
 
-    setTimeout(() => {
-      router.push("/admin/schools");
-    }, 800);
+      setTimeout(() => {
+        router.push("/admin/schools");
+      }, 800);
+    }
   };
 
   useEffect(() => {

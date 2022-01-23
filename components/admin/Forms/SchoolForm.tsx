@@ -1,15 +1,16 @@
 import { useForm } from "react-hook-form";
+import { School } from "@/types/global";
 import { Input } from "../Input";
 import { LoadingSpinner } from "../LoadingSpinner";
 
 interface SchoolFormProps {
   className?: string;
-  school?: any;
+  school?: School;
   pending?: boolean;
-  onSaveSchool: (school: any) => void;
+  onSaveSchool: (school: School) => void;
 }
 
-const DEFAULT_SCHOOL = {
+const DEFAULT_SCHOOL: School = {
   name: "",
   postcode: "",
 };
@@ -19,7 +20,14 @@ export const SchoolForm: React.FC<SchoolFormProps> = ({
   pending,
   onSaveSchool,
 }) => {
-  const { register, handleSubmit } = useForm({ defaultValues: { ...school } });
+  const {
+    register,
+    formState: { isDirty, errors, isValid },
+    handleSubmit,
+  } = useForm<School>({
+    defaultValues: { ...school },
+    mode: "onBlur",
+  });
 
   return (
     <form
@@ -29,6 +37,8 @@ export const SchoolForm: React.FC<SchoolFormProps> = ({
       <div className="flex mb-8 w-full">
         <Input
           register={register}
+          options={{ required: "Please add a name for the school" }}
+          error={errors.name}
           label="Name"
           type="text"
           name="name"
@@ -38,6 +48,8 @@ export const SchoolForm: React.FC<SchoolFormProps> = ({
       <div className="flex mb-8">
         <Input
           register={register}
+          options={{ required: "Please add a postcode" }}
+          error={errors.postcode}
           label="postcode"
           name="postcode"
           type="text"
@@ -50,14 +62,10 @@ export const SchoolForm: React.FC<SchoolFormProps> = ({
         <button
           className="btn-admin btn-primary mr-4"
           type="submit"
-          disabled={pending} // @TODO Check from react hook form
+          disabled={pending || !isValid || !isDirty}
         >
           {pending ? <LoadingSpinner /> : "Save School"}
         </button>
-
-        {/* {#if error !== undefined}
-      <AlertErrorBox {error} />
-    {/if} */}
       </div>
     </form>
   );
